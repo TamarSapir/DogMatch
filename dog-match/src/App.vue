@@ -22,7 +22,7 @@ type Dog = {
   imageUrl: string;
 };
 
-const API_URL = "http://localhost:4000";
+const API_URL = "https://dogmatch-fso5.onrender.com";
 
 const MOCK_DOGS: Dog[] = [
   {
