@@ -36,6 +36,16 @@ app.get("/api/health", (req, res) => {
 const OpenAI = require("openai");
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+function mapToPreferences(raw) {
+  const sizeRaw = (raw?.size || "any").toLowerCase();
+  const energyRaw = (raw?.energy || "medium").toLowerCase();
+
+  const size = sizeRaw === "small" ? "small" : "any";
+  const energy = energyRaw === "high" ? "high" : "low_or_medium";
+
+  return { size, energy };
+}
+
 app.post("/api/onboarding", async (req, res) => {
   try {
     const { text } = req.body;
@@ -72,10 +82,12 @@ app.post("/api/onboarding", async (req, res) => {
       return res.json({ error: "format_error", raw: aiText });
     }
 
-    res.json({
-      preferences: parsed,
-      ai_raw: aiText,
-    });
+   const preferences = mapToPreferences(parsed);
+
+  res.json({
+    preferences,
+    ai_raw: aiText,
+  });
   } catch (err) {
     console.error("AI ERROR:", err.message);
     res.status(500).json({ error: "server_error" });
