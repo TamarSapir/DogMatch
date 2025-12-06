@@ -76,6 +76,7 @@ async function handleOnboardingSubmit() {
   loadingOnboarding.value = true;
 
   try {
+    console.log("API_URL IS:", API_URL);
     const res = await fetch(`${API_URL}/api/onboarding`, {
       method: "POST",
       headers: {
